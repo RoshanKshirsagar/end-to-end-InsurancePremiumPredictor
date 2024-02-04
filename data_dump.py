@@ -6,10 +6,10 @@ from dotenv import load_dotenv
 
 # Load environment variables from the .env file
 load_dotenv()
-mongo_url = "mongo_url"
+mongo_url = "MONGO_DB_URL"
 mongo = os.getenv(mongo_url)
 
-client = pymongo.MongoClient(mongo_url)
+client = pymongo.MongoClient(mongo)
 
 DATA_FILE_PATH = (r"C:\Users\rosha\Documents\Projects\Machine learning\end-to-end-InsurancePremiumPredictor\insurance.csv")
 DATABASE_NAME = "insurance"
