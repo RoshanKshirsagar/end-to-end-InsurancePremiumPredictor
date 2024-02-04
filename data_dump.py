@@ -1,8 +1,15 @@
 import pymongo # pip install pymongo
 import pandas as pd
 import json
+import os
+from dotenv import load_dotenv
 
-client = pymongo.MongoClient("mongodb+srv://roshan1234:roshan12345@cluster0.kkal65f.mongodb.net/?retryWrites=true&w=majority")
+# Load environment variables from the .env file
+load_dotenv()
+mongo_url = "mongo_url"
+mongo = os.getenv(mongo_url)
+
+client = pymongo.MongoClient(mongo_url)
 
 DATA_FILE_PATH = (r"C:\Users\rosha\Documents\Projects\Machine learning\end-to-end-InsurancePremiumPredictor\insurance.csv")
 DATABASE_NAME = "insurance"
