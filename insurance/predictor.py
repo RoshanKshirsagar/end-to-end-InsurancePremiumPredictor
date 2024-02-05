@@ -2,7 +2,6 @@ import os
 from insurance.entity.config_entity import TRANSFORMER_OBJECT_FILE_NAME,MODEL_FILE_NAME,TARGET_ENCODER_OBJECT_FILE_NAME
 from glob import glob
 from typing import Optional
-import os
 
 # Now lets start model validation
 class ModelResolver:
@@ -31,7 +30,6 @@ class ModelResolver:
             raise e
 
 # 2
-
     def get_latest_model_path(self):
         try:
             latest_dir = self.get_latest_dir_path()
@@ -40,6 +38,7 @@ class ModelResolver:
             return os.path.join(latest_dir,self.model_dir_name,MODEL_FILE_NAME)
         except Exception as e:
             raise e
+        
 # 3
     def get_latest_transformer_path(self):
         try:
@@ -49,6 +48,7 @@ class ModelResolver:
             return os.path.join(latest_dir,self.transformer_dir_name,TRANSFORMER_OBJECT_FILE_NAME)
         except Exception as e:
             raise e
+        
 # 4
     def get_latest_target_encoder_path(self):
         try:
@@ -69,6 +69,7 @@ class ModelResolver:
             return os.path.join(self.model_registry,f"{latest_dir_num+1}")
         except Exception as e:
             raise e
+        
 # 6
     def get_latest_save_model_path(self):
         try:
@@ -76,6 +77,7 @@ class ModelResolver:
             return os.path.join(latest_dir,self.model_dir_name,MODEL_FILE_NAME)
         except Exception as e:
             raise e
+        
 # 7
     def get_latest_save_transformer_path(self):
         try:
@@ -83,6 +85,7 @@ class ModelResolver:
             return os.path.join(latest_dir,self.transformer_dir_name,TRANSFORMER_OBJECT_FILE_NAME)
         except Exception as e:
             raise e
+        
 # 8
     def get_latest_save_target_encoder_path(self):
         try:

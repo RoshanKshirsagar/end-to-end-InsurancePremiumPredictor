@@ -10,8 +10,7 @@ import numpy as np
 from insurance.config import TARGET_COLUMN
 
 
-
-
+# Defining data validation class
 class DataValidation:
 
     def __init__(self,
@@ -25,7 +24,11 @@ class DataValidation:
             raise InsuranceException(e, sys)
         
 
+    
     def drop_missing_values_columns(self,df:pd.DataFrame,report_key_name:str)->Optional[pd.DataFrame]:
+        """
+        DESCRIPTION: function drops the missing values if its number cross threshold value
+        """
         try:
             
             threshold = self.data_validation_config.missing_threshold
@@ -44,12 +47,14 @@ class DataValidation:
             return df
         except Exception as e:
             raise InsuranceException(e, sys)
-    #     print("dsgfg")
     
     
     def is_required_columns_exists(self,base_df:pd.DataFrame,current_df:pd.DataFrame,report_key_name:str)->bool:
+        """
+        DESCRIPTION: function checks if our ingested data has matching columns with base data or not\
+        (does our current_df has contains required columns)
+        """
         try:
-           
             base_columns = base_df.columns
             current_columns = current_df.columns
 
@@ -69,6 +74,9 @@ class DataValidation:
 
 
     def data_drift(self,base_df:pd.DataFrame,current_df:pd.DataFrame,report_key_name:str):
+        """
+        DESCRIPTION: function checks if there is any data drift inside the current dataframe
+        """
         try:
             drift_report=dict()
 
@@ -98,14 +106,15 @@ class DataValidation:
             raise InsuranceException(e, sys)
         
         
-
+    # Function to initiate data validation process
     def initiate_data_validation(self)->artifact_entity.DataValidationArtifact:
         try:
+            logging.info(f"{'<'*20} Data Validation Started {'<'*20}")
             logging.info(f"Reading base dataframe")
             base_df = pd.read_csv(self.data_validation_config.base_file_path)
             base_df.replace({"na":np.NAN},inplace=True)
             logging.info(f"Replace na value in base df")
-            #base_df has na as null
+            # base_df has na as null
             logging.info(f"Drop null values colums from base df")
             base_df=self.drop_missing_values_columns(df=base_df,report_key_name="missing_values_within_base_dataset")
 
@@ -135,13 +144,15 @@ class DataValidation:
                 logging.info(f"As all column are available in test df hence detecting data drift")
                 self.data_drift(base_df=base_df, current_df=test_df,report_key_name="data_drift_within_test_dataset")
           
-            #write the report
-            logging.info("Write reprt in yaml file")
+            # write the report
+            logging.info("Write report in yaml file")
             utils.write_yaml_file(file_path=self.data_validation_config.report_file_path,
-            data=self.validation_error)
+                                  data=self.validation_error)
 
             data_validation_artifact = artifact_entity.DataValidationArtifact(report_file_path=self.data_validation_config.report_file_path,)
             logging.info(f"Data validation artifact: {data_validation_artifact}")
+            logging.info("Data validation Completed")
+            logging.info(f"('='*50)")
             return data_validation_artifact
         except Exception as e:
             raise InsuranceException(e, sys)

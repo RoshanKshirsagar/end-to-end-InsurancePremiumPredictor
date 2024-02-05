@@ -25,20 +25,20 @@ class ModelPusher:
     # Function to initiate model pusher
     def initiate_model_pusher(self,)->ModelPusherArtifact:
         try:
-            #load object
+            logging.info(f"{'<'*20} Model Pusher Started {'<'*20}")
+            # loading transformer, model and label encoder object
             logging.info(f"Loading transformer model and target encoder")
             transformer = load_object(file_path=self.data_transformation_artifact.transform_object_path)
             model = load_object(file_path=self.model_trainer_artifact.model_path)
             target_encoder = load_object(file_path=self.data_transformation_artifact.target_encoder_path)
 
-            #model pusher dir
+            # model pusher dir
             logging.info(f"Saving model into model pusher directory")
             save_object(file_path=self.model_pusher_config.pusher_transformer_path, obj=transformer)
             save_object(file_path=self.model_pusher_config.pusher_model_path, obj=model)
             save_object(file_path=self.model_pusher_config.pusher_target_encoder_path, obj=target_encoder)
 
-
-            #saved model dir
+            # saved model dir
             logging.info(f"Saving model in saved model dir")
             transformer_path=self.model_resolver.get_latest_save_transformer_path()
             model_path=self.model_resolver.get_latest_save_model_path()
@@ -51,6 +51,9 @@ class ModelPusher:
             model_pusher_artifact = ModelPusherArtifact(pusher_model_dir=self.model_pusher_config.pusher_model_dir,
              saved_model_dir=self.model_pusher_config.saved_model_dir)
             logging.info(f"Model pusher artifact: {model_pusher_artifact}")
+            logging.info(f"Model Pusher completed")
+            logging.info(f"('='*50)")
+            
             return model_pusher_artifact
         except Exception as e:
             raise InsuranceException(e, sys)
